@@ -1,0 +1,21 @@
+.metube-download {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 16px;
+    border: 0;
+    border-bottom: 1px solid var(--yt-spec-10-percent-layer, #ddd);
+    background: transparent;
+    color: var(--yt-spec-text-primary, #0f0f0f);
+    font: 500 14px Roboto, Arial, sans-serif;
+    text-align: left;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+    cursor: pointer;
+}
+.metube-download:hover, .metube-download:focus-visible {
+    background: var(--yt-spec-badge-chip-background, #eee);
+}
+.metube-download:focus-visible { outline: 2px solid #3ea6ff; outline-offset: -2px; }
+.metube-download:disabled { opacity: .65; cursor: default; }

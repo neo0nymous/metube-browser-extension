@@ -1,74 +1,116 @@
 <!DOCTYPE html>
-<html lang="English">
-  <head>
-    <title>MeTube Downloader</title>
-    <style>
-    body {
-      padding: 0 20px 20px 20px;
-      min-width: 400px;
-      font-size: 15px;
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MeTube · Settings</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #f4f6f8; --card: #fff; --text: #202938; --muted: #657083; --line: #dce2e9; --accent: #315cce; --success: #23733a; --error: #b3261e; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.6 system-ui, sans-serif; }
+    main { max-width: 720px; margin: 36px auto; padding: 0 24px; }
+    header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+    header img { width: 48px; height: 48px; }
+    h1 { margin: 0; font-size: 24px; letter-spacing: -.6px; }
+    h2, legend { font-size: 16px; font-weight: 650; }
+    h2 { margin: 0 0 16px; }
+    p { margin: 4px 0 0; color: var(--muted); }
+    a { color: var(--accent); }
+    section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .field { display: block; font-weight: 600; margin-bottom: 6px; }
+    input[type="url"], select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 7px; background: var(--card); color: var(--text); font: inherit; }
+    select { margin-top: 0; }
+    textarea { resize: vertical; min-height: 112px; font-family: ui-monospace, monospace; }
+    input, select, textarea { accent-color: var(--accent); }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+    .hint { font-size: 12px; margin-top: 6px; }
+    .format { margin-top: 20px; }
+    fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+    fieldset + fieldset { margin-top: 24px; }
+    legend { padding: 0; margin-bottom: 8px; }
+    .choice { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; cursor: pointer; }
+    .choice input { margin: 0; flex-shrink: 0; }
+    .actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    button { background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: 11px 22px; font: inherit; font-weight: 600; cursor: pointer; }
+    button:hover { filter: brightness(1.1); }
+    #saved { margin: 0; overflow-wrap: anywhere; }
+    .hidden { display: none; }
+    footer { margin: 24px 0; color: var(--muted); font-size: 12px; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #151920; --card: #1e242e; --text: #e6eaf1; --muted: #a3aec0; --line: #394353; --accent: #8aaaff; --success: #85d69c; --error: #ff9c94; }
+      button { background: #315cce; }
     }
-    input {
-      margin: 5px;
-      outline: none;
+    @media (max-width: 480px) {
+      main { margin: 20px auto; padding: 0 16px; }
+      section { padding: 18px; }
     }
-    textarea {
-      width: 100%;
-      height: 100px;
-    }
-    .hidden {
-      display: none;
-    }
-    #saved {
-      color: green;
-    }
-    </style>
-  </head>
-
-  <body>
-    <p>This extension is context menu button for sending links of youtube videos into you own instance of MeTube</p>
-    <p>This extension won't work without installed MeTube. For additional instructions see <a href="https://github.com/alexta69/metube" target="_blank">github page of MeTube</a>.</p>
-    <p>If you have some troubles with extension you can open issue on github page of extension.</p>
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="icon48.png" alt="" width="48" height="48">
+      <div><h1>MeTube Downloader</h1><p>Send a link. Let MeTube handle the download.</p></div>
+    </header>
+    <section id="last-status" class="hidden" aria-labelledby="status-title" role="status">
+      <h2 id="status-title">Last operation</h2>
+      <p id="status-message" style="overflow-wrap: anywhere; white-space: pre-wrap"></p>
+      <p id="status-time" class="hint"></p>
+    </section>
     <form id="form">
-      <h3>Settings</h3>
-      <label for="metube">Url of MeTube</label><input type="url" placeholder="http://0.0.0.0:8081/" name="metube" id="metube">
-      <br><br>
-      <label for="default_format">Video format:</label>
-
-      <select name="default_format" id="default_format">
-        <option value="any">Any</option>
-        <option value="mp4">MP4</option>
-        <option value="m4a">M4A</option>
-        <option value="mp3">MP3</option>
-        <option value="opus">OPUS</option>
-        <option value="wav">WAV</option>
-        <option value="thumbnail">Thumbnail</option>
-      </select>
-
-      <h4>When you left-click on the extension icon, you'd like it to:</h4>
-      <input type="radio" name="click-behavior" id="go-to-metube" value="go-to-metube" checked><label for="go-to-metube">Go to MeTube URL</label><br>
-      <input type="radio" name="click-behavior" id="send-current-url" value="send-current-url"><label for="send-current-url">Send current tab URL to MeTube (no tab switch)</label><br>
-      <input type="radio" name="click-behavior" id="send-current-url-and-switch" value="send-current-url-and-switch"><label for="send-current-url-and-switch">Send current tab URL to MeTube and switch to MeTube</label><br>
-
-      <h4>When you right-click on video preview, you'd like it to:</h4>
-      <input type="radio" name="context-menu-click-behavior" id="context-menu-send-current-url" value="context-menu-send-current-url" checked><label for="context-menu-send-current-url">Send the video URL to MeTube (no tab switch)</label><br>
-      <input type="radio" name="context-menu-click-behavior" id="context-menu-send-current-url-and-switch" value="context-menu-send-current-url-and-switch"><label for="context-menu-send-current-url-and-switch">Send the video URL to MeTube and switch to MeTube</label><br>
-
-      <h4>Advanced Settings:</h4>
-      <div id="advanced_settings">
-        <input type="checkbox" name="folder" id="folder" value="true"><label for="folder">Use subfolder based on the Hostname of the URL</label><br>
-        <input type="checkbox" name="custom_name_prefix" id="custom_name_prefix" value="true"><label for="custom_name_prefix">Use name-prefix based on the Hostname of the URL</label><br>
-        <input type="checkbox" name="disable_auto_start" id="disable_auto_start" value="true"><label for="disable_auto_start">Disable auto start of Downloads</label><br>
+      <section aria-labelledby="connection-title">
+        <h2 id="connection-title">Connection &amp; format</h2>
+        <label class="field" for="metube">MeTube address</label>
+        <input type="url" name="metube" id="metube" placeholder="http://localhost:8081" required aria-describedby="metube-hint">
+        <p class="hint" id="metube-hint">The address of your running MeTube server.</p>
+        <div class="format">
+          <label class="field" for="default_format">Download format</label>
+          <select name="default_format" id="default_format">
+            <option value="any">Any (best available)</option>
+            <option value="mp4">MP4</option>
+            <option value="m4a">M4A</option>
+            <option value="mp3">MP3</option>
+            <option value="opus">OPUS</option>
+            <option value="wav">WAV</option>
+            <option value="thumbnail">Thumbnail</option>
+          </select>
+        </div>
+      </section>
+      <section aria-label="Click behavior">
+        <fieldset>
+          <legend>Toolbar button</legend>
+          <label class="choice"><input type="radio" name="click-behavior" id="go-to-metube" value="go-to-metube" checked>Open MeTube</label>
+          <label class="choice"><input type="radio" name="click-behavior" id="send-current-url" value="send-current-url">Send current tab and stay here</label>
+          <label class="choice"><input type="radio" name="click-behavior" id="send-current-url-and-switch" value="send-current-url-and-switch">Send current tab and open MeTube</label>
+        </fieldset>
+        <fieldset>
+          <legend>“Send to MeTube” context menu</legend>
+          <label class="choice"><input type="radio" name="context-menu-click-behavior" id="context-menu-send-current-url" value="context-menu-send-current-url" checked>Send link and stay here</label>
+          <label class="choice"><input type="radio" name="context-menu-click-behavior" id="context-menu-send-current-url-and-switch" value="context-menu-send-current-url-and-switch">Send link and open MeTube</label>
+        </fieldset>
+      </section>
+      <section aria-labelledby="downloads-title">
+        <h2 id="downloads-title">Download preferences</h2>
+        <div id="advanced_settings">
+          <label class="choice"><input type="checkbox" name="folder" id="folder">Group downloads in a subfolder by source website</label>
+          <label class="choice"><input type="checkbox" name="custom_name_prefix" id="custom_name_prefix">Prefix filenames with the source website</label>
+          <label class="choice"><input type="checkbox" name="disable_auto_start" id="disable_auto_start">Queue downloads without starting automatically</label>
+        </div>
+      </section>
+      <section aria-labelledby="sites-title">
+        <h2 id="sites-title">Additional sites</h2>
+        <label class="field" for="additional">Show the context menu on links matching</label>
+        <textarea name="additional" id="additional" spellcheck="false" placeholder="https://vimeo.com/*&#10;https://*.example.com/*" aria-describedby="sites-hint"></textarea>
+        <p class="hint" id="sites-hint">YouTube is included. Add one HTTP(S) match pattern per line. Download support depends on your MeTube server.</p>
+      </section>
+      <div class="actions">
+        <button type="submit">Save settings</button>
+        <p id="saved" class="hidden" role="status" aria-live="polite"></p>
       </div>
-
-      <h3>Additional sites</h3>
-      <p>Youtube-dl support <a href="https://github.com/ytdl-org/youtube-dl/blob/master/docs/supportedsites.md" target="_blank">many another sites</a> except youtube. You can add mask url's of this sites in textfield bellow but it can affect performance and we have not tested them support</p>
-      <p><textarea name="additional" id="additional" placeholder="https://vimeo.com/*
-https://video.disney.com/*"></textarea></p>
-      <button type='submit'>Save settings</button>
-      <p id="saved" class="hidden">Settings saved!</p>
-      <p>&nbsp;</p>
     </form>
-  </body>
+    <footer>Requires your own <a href="https://github.com/alexta69/metube" target="_blank" rel="noreferrer">MeTube server</a>. After sending, hover over the extension icon for status details.</footer>
+  </main>
+  <script src="settings.js"></script>
   <script src="options.js"></script>
+</body>
 </html>

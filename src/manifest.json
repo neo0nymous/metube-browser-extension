@@ -3,8 +3,15 @@
   "description": "Use the context menu to send video into MeTube application",
   "version": "1.9",
   "manifest_version": 3,
-  "permissions": ["contextMenus", "storage", "tabs"],
-  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
   "background": {
     "service_worker": "background.js"
   },
@@ -17,8 +24,22 @@
     "default_icon": "icon128.png"
   },
   "icons": {
-   "16": "icon16.png",
-   "48": "icon48.png",
-  "128": "icon128.png"
- }
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*"
+      ],
+      "js": [
+        "youtube.js"
+      ],
+      "css": [
+        "youtube.css"
+      ]
+    }
+  ]
 }
